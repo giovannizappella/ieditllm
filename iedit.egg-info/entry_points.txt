@@ -1,0 +1,3 @@
+[console_scripts]
+iedit = iedit.main:cli
+
