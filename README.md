@@ -1,18 +1,118 @@
 # ieditllm
-CLI tools to improve latex documents using LLMs
 
-Overview
-iedit is a CLI tool able for editing Latex files to improve their form, syntax and grammar. Its aim is to provide a polished version of the document, similar to the ones published at top scientific conferences. The tool is inspired by ispell but it targets signifiantly more complex changes, thanks to the usage of AI.
+CLI tools to improve LaTeX documents using LLMs.
 
-Main features
-iedit will allow you to:
+## Overview
 
-- connect to the AI models provided by Amazon Bedrock
-- specify which model to use to polish the doc
-- see the changes one by one before they are applied to the files (with your confirmation)
-- make localized changes in the doc, while offering sufficient context to evaluate the impact
-- specify folders containing several latex documents to polish all of them
-- retain exactly the numerical values provided in the Latex documents
+iedit is a CLI tool able for editing LaTeX files to improve their form, syntax and grammar. Its aim is to provide a polished version of the document, similar to the ones published at top scientific conferences. The tool is inspired by ispell but it targets significantly more complex changes, thanks to the usage of AI.
 
-Installation
-You can easily install iedit using pip install iedit.
+## Main Features
+
+*   **AI Model Integration:** Connects to AI models provided by Amazon Bedrock and Google Gemini.
+*   **Model Selection:** Allows you to specify which AI model to use for polishing.
+*   **Interactive Changes:** Presents changes one by one for your confirmation before applying them to the files.
+*   **Localized Context:** Offers sufficient context for localized changes to help you evaluate their impact.
+*   **Batch Processing:** Supports polishing multiple LaTeX documents within a specified folder.
+*   **Numerical Value Retention:** Retains numerical values exactly as provided in the LaTeX documents, with a warning if any changes are detected.
+
+## Installation
+
+You can easily install `iedit` using `pip`:
+
+```bash
+pip install iedit
+```
+
+It is highly recommended to install it within a virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+pip install iedit
+```
+
+## Configuration
+
+### AWS Bedrock Credentials
+
+To use Amazon Bedrock models, you need to configure your AWS credentials. You can do this in several ways:
+
+1.  **AWS CLI (Recommended):** If you have the AWS CLI installed, run `aws configure` and follow the prompts to set up your access key ID, secret access key, and default region.
+
+    ```bash
+    aws configure
+    ```
+
+2.  **Environment Variables:** Set the following environment variables:
+
+    ```bash
+    export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
+    export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
+    export AWS_DEFAULT_REGION="your-aws-region" # e.g., us-east-1
+    ```
+
+3.  **Shared Credentials File:** Create or edit the `~/.aws/credentials` file (for Linux/macOS) or `%USERPROFILE%\.aws\credentials` (for Windows) with your credentials:
+
+    ```ini
+    [default]
+    aws_access_key_id = YOUR_ACCESS_KEY
+    aws_secret_access_key = YOUR_SECRET_KEY
+    ```
+
+### Google Gemini API Key
+
+To use Google Gemini models, you need to set your Gemini API key as an environment variable:
+
+```bash
+export GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+```
+
+You can obtain a Gemini API key from the [Google AI Studio](https://aistudio.google.com/app/apikey).
+
+## Usage
+
+The main command is `polish`. It can operate on a single LaTeX file or all `.tex` files within a directory.
+
+```bash
+iedit polish <path_to_file_or_directory> [OPTIONS]
+```
+
+### Options:
+
+*   `--provider [bedrock|gemini]`: The AI provider to use. Defaults to `bedrock`.
+*   `--model-id TEXT`: The specific model ID to use for polishing.
+    *   For Bedrock, examples include `anthropic.claude-v2`, `amazon.titan-text-express-v1`.
+    *   For Gemini, use `gemini-pro`.
+*   `--region TEXT`: (Only for Bedrock) The AWS region to use. Defaults to `us-east-1`.
+
+### Examples:
+
+**1. Polish a single LaTeX file using Bedrock (default):**
+
+```bash
+iedit polish my_document.tex
+```
+
+**2. Polish a single LaTeX file using Bedrock with a specific model:**
+
+```bash
+iedit polish my_document.tex --model-id anthropic.claude-v2
+```
+
+**3. Polish all LaTeX files in a directory using Bedrock:**
+
+```bash
+iedit polish my_latex_project/
+```
+
+**4. Polish a single LaTeX file using Gemini:**
+
+```bash
+iedit polish my_document.tex --provider gemini --model-id gemini-pro
+```
+
+**5. Polish all LaTeX files in a directory using Gemini:**
+
+```bash
+iedit polish my_latex_project/ --provider gemini --model-id gemini-pro
+```
